@@ -50,4 +50,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const thePieces = [lPiece, sPiece, zPiece, tPiece, squarePiece, iPiece];
 
+    let currentPosition = 4;
+    let currentRotation = 0;
+
+    // Randomly select a piece and its first rotation
+    let random = Math.floor(Math.random()*thePieces.length);
+    let current = thePieces[random][currentRotation];
+
+    // Draw the Piece
+
+function drawPiece() {
+    current.forEach(index => {
+        squares[currentPosition + index].classList.add('piece')
+    })
+}
+
+// Delete the Piece
+function deletePiece() {
+    current.forEach(index => {
+        squares[currentPosition + index].classList.remove('piece')
+    })
+}
+
+
+
+
+
 })
