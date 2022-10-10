@@ -75,6 +75,20 @@ function deletePiece() {
 // Move piece down game board every second
 timerId = setInterval(moveDown, 1000);
 
+// Assign function to key codes
+function control(e) {
+    if (e.keyCode === 37) {
+        moveLeft();
+    } else if (e.keyCode === 38) {
+        // rotate();
+    } else if (e.keyCode=== 39) {
+        moveRight();
+    } else if (e.keyCode === 40) {
+        moveDown();
+    }
+}
+document.addEventListener('keyup', control);
+
 // Move down function
 function moveDown() {
     deletePiece();
@@ -95,7 +109,32 @@ function freezePiece() {
     }
 };
 
+// Move piece left unless hit the edge or hit another piece
+function moveLeft() {
+    deletePiece();
+    const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0);
 
+    if(!isAtLeftEdge) currentPosition -= 1;
+
+    if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+        currentPosition += 1;
+    }
+
+    drawPiece();
+}
+
+// Move piece right unless hit the edge or hit another piece
+function moveRight() {
+    deletePiece();
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1 );
+
+    if(!isAtRightEdge) currentPosition += 1;
+
+    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+        currentPosition -= 1;
+    }
+    drawPiece();
+}
 
 
 
