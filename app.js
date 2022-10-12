@@ -79,8 +79,10 @@ timerId = setInterval(moveDown, 1000);
 function control(e) {
     if (e.keyCode === 37) {
         moveLeft();
-    } else if (e.keyCode === 38) {
-        // rotate();
+    } else if (e.keyCode === 65) {
+        rotateLeft();
+    } else if (e.keyCode === 83) {
+        rotateRight();
     } else if (e.keyCode=== 39) {
         moveRight();
     } else if (e.keyCode === 40) {
@@ -126,17 +128,39 @@ function moveLeft() {
 // Move piece right unless hit the edge or hit another piece
 function moveRight() {
     deletePiece();
-    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width -1 );
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
 
-    if(!isAtRightEdge) currentPosition += 1;
+    if (!isAtRightEdge) currentPosition += 1;
 
-    if(current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+    if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
         currentPosition -= 1;
     }
+
     drawPiece();
 }
 
+// Rotate the current piece
+function rotateLeft() {
+    deletePiece();
+    if (currentRotation === 0) {
+        // If current rotation is in the 1st position, move to the 4th position
+        currentRotation = 3;
+    } else currentRotation --;
+    current = thePieces[random][currentRotation]
+    drawPiece();
+}
 
+function rotateRight() {
+    deletePiece();
+    currentRotation ++;
+    if (currentRotation === current.length) {
+        // If current rotation is in the 4th position, revert to the 1st position
+        currentRotation = 0;
+
+    }
+    current = thePieces[random][currentRotation]
+    drawPiece();
+}
 
 
 
