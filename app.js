@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
     let squares = Array.from(document.querySelectorAll('.grid div'));
-    const ScoreDisplay = document.querySelector('#score');
-    const StartBtn = document.querySelector('#start-button');
+    const scoreDisplay = document.querySelector('#score');
+    const startBtn = document.querySelector('#start-button');
     const width = 10;
+    let nextRandom = 0;
+    let timerId
 
     // The Pieces
     const lPiece = [
@@ -73,7 +75,7 @@ function deletePiece() {
 };
 
 // Move piece down game board every second
-timerId = setInterval(moveDown, 1000);
+// timerId = setInterval(moveDown, 1000);
 
 // Assign function to key codes
 function control(e) {
@@ -104,10 +106,12 @@ function freezePiece() {
     if(current.some(index => squares[currentPosition + index + width].classList.contains('taken'))) {
         current.forEach(index => squares[currentPosition + index].classList.add('taken'));
         // Start a new piece on the board
-        random = Math.floor(Math.random() * thePieces.length);
+        random = nextRandom;
+        nextRandom = Math.floor(Math.random() * thePieces.length);
         current = thePieces[random][currentRotation];
         currentPosition = 4;
         drawPiece();
+        displayShape();
     }
 };
 
@@ -161,6 +165,53 @@ function rotateRight() {
     current = thePieces[random][currentRotation]
     drawPiece();
 }
+
+// Show "Next Piece" in mini grid
+const displaySquares = document.querySelectorAll('.mini-grid div');
+const displayWidth = 4;
+let displayIndex = 0;
+
+// Array of pieces in their first position
+const upNextPiece = [
+    // L Piece
+    [1, displayWidth + 1, displayWidth*2+1, 2],
+    // S Piece
+    [0, displayWidth, displayWidth+1, displayWidth*2+1],
+    // Z Piece
+    [displayWidth, displayWidth+1, displayWidth*2+1, displayWidth*2+2],
+    // T Piece
+    [1, displayWidth, displayWidth+1, displayWidth+2],
+    // Square Piece
+    [0, 1, displayWidth, displayWidth+1],
+    // I Piece
+    [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1],
+]
+
+// Display the shape in the mini-grid display
+function displayShape() {
+    // Remove any trace of a piece from the entire grid
+    displaySquares.forEach(square => {
+        square.classList.remove('piece')
+    })
+    upNextPiece[nextRandom].forEach(index => {
+        displaySquares[displayIndex + index].classList.add('piece');
+    })
+}
+
+// Add functionality to the Start/Pause button
+startBtn.addEventListener('click', () => {
+    if (timerId) {
+        clearInterval(timerId);
+        timerId = null;
+    } else {
+        drawPiece();
+        timerId = setInterval(moveDown, 1000);
+        nextRandom = Mathlfloor(Math.random()*thePieces.length);
+        displayShape();
+    }
+})
+
+
 
 
 
