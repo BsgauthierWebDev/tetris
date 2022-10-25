@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let nextRandom = 0;
     let timerId;
     let score = 0;
+    const colors = [
+        'orange',
+        'red',
+        'purple',
+        'green',
+        'blue',
+        'yellow'
+    ]
 
     // The Pieces
     const lPiece = [
@@ -65,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function drawPiece() {
     current.forEach(index => {
         squares[currentPosition + index].classList.add('piece');
+        squares[currentPosition + index].style.backgroundColor = colors[random];
     })
 };
 
@@ -72,6 +81,7 @@ function drawPiece() {
 function deletePiece() {
     current.forEach(index => {
         squares[currentPosition + index].classList.remove('piece');
+        squares[currentPosition + index].style.backgroundColor = '';
     })
 };
 
@@ -172,7 +182,7 @@ function rotateRight() {
 // Show "Next Piece" in mini grid
 const displaySquares = document.querySelectorAll('.mini-grid div');
 const displayWidth = 4;
-let displayIndex = 0;
+const displayIndex = 0;
 
 // Array of pieces in their first position
 const upNextPiece = [
@@ -194,10 +204,12 @@ const upNextPiece = [
 function displayShape() {
     // Remove any trace of a piece from the entire grid
     displaySquares.forEach(square => {
-        square.classList.remove('piece')
+        square.classList.remove('piece');
+        square.style.backgroundColor = '';
     })
     upNextPiece[nextRandom].forEach(index => {
         displaySquares[displayIndex + index].classList.add('piece');
+        displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom];
     })
 }
 
@@ -225,6 +237,7 @@ function addScore() {
             row.forEach(index => {
                 squares[index].classList.remove('taken');
                 squares[index].classList.remove('piece');
+                squares[index].style.backgroundColor = '';
             })
             const squaresRemoved = squares.splice(i, width);
             squares = squaresRemoved.concat(squares);
